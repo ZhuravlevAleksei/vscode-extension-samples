@@ -43,7 +43,13 @@
 					"description": "Traces the communication between VS Code and the language server."
 				}
 			}
-		}
+		},
+		"languages": [{
+			"id": "SDL",
+			"extensions": [ ".pr" ],
+			"aliases": [ "SDL" ],
+			"configuration": "./language-configuration.json"
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

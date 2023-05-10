@@ -4,7 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from 'path';
-import { workspace, ExtensionContext } from 'vscode';
+import { workspace, ExtensionContext, languages } from 'vscode';
 
 import {
 	LanguageClient,
@@ -12,6 +12,8 @@ import {
 	ServerOptions,
 	TransportKind
 } from 'vscode-languageclient/node';
+
+import { DocumentSemanticTokensProvider, semantic_legend } from './semantic_tokens';
 
 let client: LanguageClient;
 
@@ -34,7 +36,7 @@ export function activate(context: ExtensionContext) {
 	// Options to control the language client
 	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
-		documentSelector: [{ scheme: 'file', language: 'plaintext' }],
+		documentSelector: [{ scheme: 'file', language: 'SDL' }],
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
@@ -48,6 +50,9 @@ export function activate(context: ExtensionContext) {
 		serverOptions,
 		clientOptions
 	);
+
+	context.subscriptions.push(languages.registerDocumentSemanticTokensProvider(
+		{ language: 'SDL' }, new DocumentSemanticTokensProvider(), semantic_legend));
 
 	// Start the client. This will also launch the server
 	client.start();
